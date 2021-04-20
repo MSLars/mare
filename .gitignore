@@ -1,0 +1,7 @@
+/models/
+/evaluations/*
+
+__pycache__/
+*.py[cod]
+
+mare.egg-info/
