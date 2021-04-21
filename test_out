@@ -1,0 +1,11 @@
+{
+  "accuracy": 0.0,
+  "accuracy3": 0.0,
+  "precision-overall": 0.6525911708253358,
+  "recall-overall": 0.6719367588932805,
+  "f1-measure-overall": 0.6621226874390931,
+  "PR-overall": 0.2816901408450702,
+  "RR-overall": 0.3124999999999997,
+  "FR-overall": 0.29629629629624615,
+  "loss": 87.92863904512845
+}

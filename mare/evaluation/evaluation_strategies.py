@@ -246,6 +246,7 @@ def respect_only_mandatory_args_no_trigger(gold, prediction):
 
     return prediction_relations, gold_relations
 
+
 def spert_only_two_mandatory_args(gold, prediction):
     gold_copy = copy_dict(gold)
     prediction_copy = copy_dict(prediction)
@@ -262,7 +263,7 @@ def spert_only_two_mandatory_args(gold, prediction):
         return [], []
 
     gold_rels_reduced = [rel for rel in gold_rels_tmp if len(rel["ents"]) == 2]
-
+    #gold_rels_reduced = gold_rels_tmp
 
     for pred in prediction_copy["relations"]:
         pred_reduced = reduce_to_mandatory_arguments(pred)
@@ -280,6 +281,39 @@ def spert_only_two_mandatory_args(gold, prediction):
         gold_relations.append(gold_rel["name"])
 
     return prediction_relations, gold_relations
+
+
+def spert_only_two_mandatory_args_v2(gold, prediction):
+    union = set()
+
+    def to_tuples(rels):
+        result = []
+        for rel in rels:
+            rel = reduce_to_mandatory_arguments(rel)
+            #attrs = tuple([tuple(ent.values()) for ent in sort_entities(rel["ents"])])
+            attrs = tuple([tuple(ent.values()) for ent in rel["ents"]])
+            result += [(rel["name"], attrs)]
+        return result
+    gold_tuples = to_tuples(copy_dict(gold["relations"]))
+    pred_tuples = to_tuples(copy_dict(prediction["relations"]))
+    union.update(gold_tuples)
+    union.update(pred_tuples)
+
+    gt_flat = []
+    pred_flat = []
+
+    for s in union:
+        if s in gold_tuples:
+            gt_flat.append(s[0])
+        else:
+            gt_flat.append(NO_MATCH)
+
+        if s in pred_tuples:
+            pred_flat.append(s[0])
+        else:
+            pred_flat.append(NO_MATCH)
+
+    return pred_flat, gt_flat
 
 
 def all_args_mandatory(gold, prediction):

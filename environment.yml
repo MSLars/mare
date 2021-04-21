@@ -33,6 +33,7 @@ dependencies:
   - pip:
     - allennlp==1.2.0
     - allennlp-models==1.2.0
+    - optuna==2.4.0
     - optuna-dashboard==0.2.2
     - streamlit==0.75.0
     - htbuilder==0.3.0

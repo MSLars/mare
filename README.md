@@ -16,12 +16,23 @@ conda env create -f environment.yml
 
 This may take several minutes.
 
+Create some necessary folders
+
+```shell
+mkdir models
+mkdir evaluations
+```
+
 # Reproduction of results
 
-To reproduce the values from the Paper, download the archive
+To reproduce the values from the Paper, download the corresponding models
+from https://fh-aachen.sciebo.de/s/T0RFmqNU0n5jI08 and put the `.tar.gz`
+files in the models folder.
 
 The following instructions can be used to reproduce the results in the paper.
 
+All evaluations create a subfolder in evaluations. if a folder already exists,
+the evaluation is not executed multiple times.
 ## Sequence Tagging
 
 The values for AR, Cl, MRE, CRE und BRE correspond to the values of 
@@ -39,45 +50,45 @@ The result shoud be
 ```
 EVALUATION RESULTS FOR MRE
 
-precision_micro: 0.420689655172413
+precision_micro: 0.42957746478873204
 recall_micro: 0.4765625
-f1_micro: 0.446886446886446
+f1_micro: 0.45185185185185106
 
 EVALUATION RESULTS FOR Cl
 
-precision_micro: 0.7103448275862061
+precision_micro: 0.725352112676056
 recall_micro: 0.8046875
-f1_micro: 0.754578754578754
+f1_micro: 0.7629629629629631
 
 EVALUATION RESULTS FOR CRE
 
-precision_micro: 0.268965517241379
-recall_micro: 0.3046875
-f1_micro: 0.28571428571428503
+precision_micro: 0.28169014084507005
+recall_micro: 0.3125
+f1_micro: 0.296296296296296
 
 EVALUATION RESULTS FOR AR
 
-precision_micro: 0.6567164179104471
+precision_micro: 0.660412757973733
 recall_micro: 0.6591760299625461
-f1_micro: 0.6579439252336441
+f1_micro: 0.659793814432989
 
 EVALUATION RESULTS FOR BRE
 
-precision_micro: 0.435185185185185
+precision_micro: 0.439252336448598
 recall_micro: 0.49473684210526303
-f1_micro: 0.46305418719211805
+f1_micro: 0.46534653465346504
 
 EVALUATION RESULTS FOR MRE_no_trigger
 
-precision_micro: 0.462068965517241
-recall_micro: 0.5234375
-f1_micro: 0.49084249084249004
+precision_micro: 0.464788732394366
+recall_micro: 0.515625
+f1_micro: 0.48888888888888804
 
 EVALUATION RESULTS FOR AR_no_trigger
 
-precision_micro: 0.633251833740831
+precision_micro: 0.6410891089108911
 recall_micro: 0.6301703163017031
-f1_micro: 0.6317073170731701
+f1_micro: 0.635582822085889
 ```
 
 ## Span Labeling
@@ -225,45 +236,45 @@ The result shoud be
 ```
 EVALUATION RESULTS FOR MRE
 
-precision_micro: 0.389312977099236
-recall_micro: 0.3984375
-f1_micro: 0.39382239382239304
+precision_micro: 0.396825396825396
+recall_micro: 0.390625
+f1_micro: 0.39370078740157405
 
 EVALUATION RESULTS FOR Cl
 
-precision_micro: 0.65648854961832
+precision_micro: 0.682539682539682
 recall_micro: 0.671875
-f1_micro: 0.6640926640926641
+f1_micro: 0.677165354330708
 
 EVALUATION RESULTS FOR CRE
 
-precision_micro: 0.24427480916030503
-recall_micro: 0.25
-f1_micro: 0.24710424710424703
+precision_micro: 0.26190476190476103
+recall_micro: 0.2578125
+f1_micro: 0.259842519685039
 
 EVALUATION RESULTS FOR AR
 
-precision_micro: 0.6561797752808981
+precision_micro: 0.6591422121896161
 recall_micro: 0.5468164794007491
-f1_micro: 0.5965270684371801
+f1_micro: 0.597748208802456
 
 EVALUATION RESULTS FOR BRE
 
-precision_micro: 0.408163265306122
-recall_micro: 0.421052631578947
-f1_micro: 0.41450777202072503
+precision_micro: 0.40206185567010305
+recall_micro: 0.410526315789473
+f1_micro: 0.40625000000000006
 
 EVALUATION RESULTS FOR MRE_no_trigger
 
-precision_micro: 0.427480916030534
-recall_micro: 0.4375
-f1_micro: 0.432432432432432
+precision_micro: 0.42857142857142805
+recall_micro: 0.421875
+f1_micro: 0.42519685039370003
 
 EVALUATION RESULTS FOR AR_no_trigger
 
-precision_micro: 0.621951219512195
+precision_micro: 0.6296296296296291
 recall_micro: 0.49635036496350304
-f1_micro: 0.552097428958051
+f1_micro: 0.5551020408163261
 
 ```
 
@@ -281,45 +292,45 @@ The result shoud be
 ```
 EVALUATION RESULTS FOR MRE
 
-precision_micro: 0.056
+precision_micro: 0.0625
 recall_micro: 0.0546875
-f1_micro: 0.055335968379446
+f1_micro: 0.058333333333333
 
 EVALUATION RESULTS FOR Cl
 
-precision_micro: 0.728
-recall_micro: 0.7109375
-f1_micro: 0.7193675889328061
+precision_micro: 0.7589285714285711
+recall_micro: 0.6640625
+f1_micro: 0.708333333333333
 
 EVALUATION RESULTS FOR CRE
 
-precision_micro: 0.048
+precision_micro: 0.053571428571428006
 recall_micro: 0.046875
-f1_micro: 0.047430830039525
+f1_micro: 0.049999999999999004
 
 EVALUATION RESULTS FOR AR
 
-precision_micro: 0.662337662337662
-recall_micro: 0.47752808988764006
-f1_micro: 0.554951033732317
+precision_micro: 0.6737967914438501
+recall_micro: 0.47191011235955005
+f1_micro: 0.5550660792951541
 
 EVALUATION RESULTS FOR BRE
 
-precision_micro: 0.07865168539325801
+precision_micro: 0.08235294117647
 recall_micro: 0.073684210526315
-f1_micro: 0.07608695652173901
+f1_micro: 0.077777777777777
 
 EVALUATION RESULTS FOR MRE_no_trigger
 
-precision_micro: 0.512
-recall_micro: 0.5
-f1_micro: 0.50592885375494
+precision_micro: 0.48214285714285704
+recall_micro: 0.421875
+f1_micro: 0.449999999999999
 
 EVALUATION RESULTS FOR AR_no_trigger
 
-precision_micro: 0.662337662337662
-recall_micro: 0.620437956204379
-f1_micro: 0.6407035175879391
+precision_micro: 0.6737967914438501
+recall_micro: 0.613138686131386
+f1_micro: 0.6420382165605091
 
 ```
 
@@ -376,6 +387,7 @@ EVALUATION RESULTS FOR AR_no_trigger
 precision_micro: 0.72
 recall_micro: 0.613138686131386
 f1_micro: 0.6622864651773981
+
 
 ```
 
