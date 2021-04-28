@@ -58,6 +58,7 @@ class SpERT(BertPreTrainedModel):
                        entity_sizes: torch.tensor, relations: torch.tensor, rel_masks: torch.tensor):
         # get contextualized token embeddings from last transformer layer
         context_masks = context_masks.float()
+        # h = self.bert(input_ids=encodings, attention_mask=context_masks)['last_hidden_state']
         h = self.bert(input_ids=encodings, attention_mask=context_masks)[0]
 
         batch_size = encodings.shape[0]
@@ -81,10 +82,11 @@ class SpERT(BertPreTrainedModel):
 
         return entity_clf, rel_clf
 
-    def _forward_eval(self, encodings: torch.tensor, context_masks: torch.tensor, entity_masks: torch.tensor,
-                      entity_sizes: torch.tensor, entity_spans: torch.tensor, entity_sample_masks: torch.tensor):
+    def _forward_inference(self, encodings: torch.tensor, context_masks: torch.tensor, entity_masks: torch.tensor,
+                           entity_sizes: torch.tensor, entity_spans: torch.tensor, entity_sample_masks: torch.tensor):
         # get contextualized token embeddings from last transformer layer
         context_masks = context_masks.float()
+        # h = self.bert(input_ids=encodings, attention_mask=context_masks)['last_hidden_state']
         h = self.bert(input_ids=encodings, attention_mask=context_masks)[0]
 
         batch_size = encodings.shape[0]
@@ -191,8 +193,6 @@ class SpERT(BertPreTrainedModel):
             non_zero_spans = entity_spans[i][non_zero_indices].tolist()
             non_zero_indices = non_zero_indices.tolist()
 
-
-
             # create relations and masks
             for i1, s1 in zip(non_zero_indices, non_zero_spans):
                 for i2, s2 in zip(non_zero_indices, non_zero_spans):
@@ -220,11 +220,11 @@ class SpERT(BertPreTrainedModel):
 
         return batch_relations, batch_rel_masks, batch_rel_sample_masks
 
-    def forward(self, *args, evaluate=False, **kwargs):
-        if not evaluate:
+    def forward(self, *args, inference=False, **kwargs):
+        if not inference:
             return self._forward_train(*args, **kwargs)
         else:
-            return self._forward_eval(*args, **kwargs)
+            return self._forward_inference(*args, **kwargs)
 
 
 # Model access

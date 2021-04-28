@@ -5,9 +5,15 @@ Repository for the paper submission
 # Environment
 
 Tested with Ubuntu 18.04, Anaconda 2020.11 and NVIDIA driver version 450.102.04
+If you have a lower driver version and you don't need to train own models,
+we recommend to install the environment without the cuda requirement.
 
 If you have no coda-compatible GPU, delete the cudatoolkit dependency 
-from the `environment.yml` file.
+from the `environment.yml` file. If you do not have a cuda GPU, remove the line
+```
+- cudatoolkit=10.2.89
+```
+from `environment.yml`.
 
 To install the conda environment execute
 ```shell
@@ -282,6 +288,7 @@ f1_micro: 0.5551020408163261
 The F1 scores for AR_no_trigger und MRE_no_trigger correspond to the values
 of **Seq. Tag. without Trigger** in **Table 3**
 
+Change the include_trigger Parameter in mare/seq_lab_elmo_pred.py to False.
 
 ```shell
 sh scripts/evaluate_model.sh models/sequence_no_trigger.tar.gz evaluations/seq_tag_no_trig seq_lab_elmo_pred
@@ -290,48 +297,48 @@ sh scripts/evaluate_model.sh models/sequence_no_trigger.tar.gz evaluations/seq_t
 The result shoud be
 
 ```
+
 EVALUATION RESULTS FOR MRE
 
-precision_micro: 0.0625
+precision_micro: 0.056
 recall_micro: 0.0546875
-f1_micro: 0.058333333333333
+f1_micro: 0.055335968379446
 
 EVALUATION RESULTS FOR Cl
 
-precision_micro: 0.7589285714285711
-recall_micro: 0.6640625
-f1_micro: 0.708333333333333
+precision_micro: 0.728
+recall_micro: 0.7109375
+f1_micro: 0.7193675889328061
 
 EVALUATION RESULTS FOR CRE
 
-precision_micro: 0.053571428571428006
+precision_micro: 0.048
 recall_micro: 0.046875
-f1_micro: 0.049999999999999004
+f1_micro: 0.047430830039525
 
 EVALUATION RESULTS FOR AR
 
-precision_micro: 0.6737967914438501
-recall_micro: 0.47191011235955005
-f1_micro: 0.5550660792951541
+precision_micro: 0.662337662337662
+recall_micro: 0.47752808988764006
+f1_micro: 0.554951033732317
 
 EVALUATION RESULTS FOR BRE
 
-precision_micro: 0.08235294117647
+precision_micro: 0.07865168539325801
 recall_micro: 0.073684210526315
-f1_micro: 0.077777777777777
+f1_micro: 0.07608695652173901
 
 EVALUATION RESULTS FOR MRE_no_trigger
 
-precision_micro: 0.48214285714285704
-recall_micro: 0.421875
-f1_micro: 0.449999999999999
+precision_micro: 0.512
+recall_micro: 0.5
+f1_micro: 0.50592885375494
 
 EVALUATION RESULTS FOR AR_no_trigger
 
-precision_micro: 0.6737967914438501
-recall_micro: 0.613138686131386
-f1_micro: 0.6420382165605091
-
+precision_micro: 0.662337662337662
+recall_micro: 0.620437956204379
+f1_micro: 0.6407035175879391
 ```
 
 ## Span Labeling No Trigger
@@ -388,6 +395,7 @@ precision_micro: 0.72
 recall_micro: 0.613138686131386
 f1_micro: 0.6622864651773981
 
-
 ```
+# TODO
 
+Change the include_trigger Parameter in mare/seq_lab_elmo_pred.py !

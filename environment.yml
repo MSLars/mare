@@ -14,6 +14,7 @@ dependencies:
   - tqdm=4.56.0
   - pytorch=1.7.1
   - torchvision=0.8.2
+  # REMOVE THIS LINE IF YOU DO NOT HAVE A CUDA GPU!!!
   - cudatoolkit=10.2.89
   - spacy=2.3.5
   - jupyter=1.0.0

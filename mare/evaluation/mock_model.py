@@ -7,8 +7,29 @@ from allennlp.models import load_archive
 from dygie.predictors import dygie
 from spert.input_reader import JsonInputReader
 from spert.models import SpERT
+from spert import prediction, util
 from transformers import BertConfig, BertTokenizer
 import dygie.data.dataset_readers.dygie
+
+
+relation_args_names = {
+    "Accident": ["location", "trigger"],
+    "CanceledRoute": ["location", "trigger"],
+    "CanceledStop": ["location", "trigger"],
+    "Delay": ["location", "trigger"],
+    "Disaster": ["type", "location"],
+    "Obstruction": ["location", "trigger"],
+    "RailReplacementService": ["location", "trigger"],
+    "TrafficJam": ["location", "trigger"],
+    "Acquisition": ["buyer", "acquired"],
+    "Insolvency": ["company", "trigger"],
+    "Layoffs": ["company", "trigger"],
+    "Merger": ["old", "old"],
+    "OrganizationLeadership": ["organization", "person"],
+    "SpinOff": ["parent", "child"],
+    "Strike": ["company", "trigger"]
+}
+
 
 class MockModel:
 
@@ -29,14 +50,18 @@ class SpertMockModel(MockModel):
         # We need the input reader to create the mappings entity_label_id -> entity_label (relations vice versa)
         self.input_reader = JsonInputReader(types_path, self.tokenizer)
 
+        cls_id = self.tokenizer.convert_tokens_to_ids('[CLS]')
+
+        self.rel_threshold = 0.85
+
         self.model = SpERT.from_pretrained(model_path,
                                       config=self.config,
-                                      cls_token=3,
+                                      cls_token=cls_id,
                                       relation_types=15,
                                       entity_types=17,
                                       max_pairs=1000,
                                       prop_drop=0.0,
-                                      size_embedding=22,
+                                      size_embedding=25,
                                       freeze_transformer=False)
 
     def convert_to_model_input(self, tokenization: List[str] = None):
@@ -53,7 +78,7 @@ class SpertMockModel(MockModel):
 
             token_encoding = self.tokenizer.encode(token_phrase, add_special_tokens=False)
 
-            if len(doc_encoding) + len(token_encoding) > 509:
+            if len(doc_encoding) + len(token_encoding) > 512:
                 break
 
             span_start, span_end = (len(doc_encoding), len(doc_encoding) + len(token_encoding))
@@ -129,79 +154,146 @@ class SpertMockModel(MockModel):
                     entity_spans=entity_spans.unsqueeze(0),
                     entity_sample_masks=entity_sample_masks.unsqueeze(0))
 
+    def transform_predictions_to_relations(self, predictions, tokens):
+        relations = []
+
+        # convert entities
+        converted_entities = []
+        for entity in predictions[0][0]:
+            entity_span = entity[:2]
+            span_tokens = util.get_span_tokens(tokens, entity_span)
+            entity_type = entity[2].identifier
+            converted_entity = dict(type=entity_type, start=span_tokens[0].index, end=span_tokens[-1].index + 1)
+            converted_entities.append(converted_entity)
+        converted_entities = sorted(converted_entities, key=lambda e: e['start'])
+
+
+        for rel_cand in predictions[1][0]:
+
+            head, tail = rel_cand[:2]
+            head_span, head_type = head[:2], head[2].identifier
+            tail_span, tail_type = tail[:2], tail[2].identifier
+            head_span_tokens = util.get_span_tokens(tokens, head_span)
+            tail_span_tokens = util.get_span_tokens(tokens, tail_span)
+            relation_type = rel_cand[2].identifier
+
+            converted_head = dict(type=head_type, start=head_span_tokens[0].index,
+                                  end=head_span_tokens[-1].index + 1)
+            converted_tail = dict(type=tail_type, start=tail_span_tokens[0].index,
+                                  end=tail_span_tokens[-1].index + 1)
+
+            head_idx = converted_entities.index(converted_head)
+            tail_idx = converted_entities.index(converted_tail)
+
+            h_role, t_role = sorted(relation_args_names[relation_type])
+            # converted_relation = dict(type=relation_type, head=head_idx, tail=tail_idx)
+            # converted_relations.append(converted_relation)
+
+            # relation_name = rel_cand[2].identifier
+            #
+            # h_role, t_role = sorted(relation_args_names[relation_name])
+            #
+            relations += [{
+                "name": relation_type,
+                "ents": [{
+                    "name": h_role,
+                    "start": converted_head["start"],
+                    "end": converted_head["end"]-1,
+                },{
+                    "name": t_role,
+                    "start": converted_tail["start"],
+                    "end": converted_tail["end"]-1,
+                },],
+            }]
+
+        return relations
+
     def predict_batch_json(self, batch: List[Dict[str, List[str]]]):
         results = []
+        with torch.no_grad():
+            self.model.eval()
+            for elem in batch:
+                tokens = elem["tokens"]
+                spert_tokens, encodings, encoding_to_token_idx = self.convert_to_model_input(tokens)
+                instance = self.create_entity_candidate_data(encodings, spert_tokens)
 
-        for elem in batch:
-            tokens = elem["tokens"]
-            spert_tokens, encodings, encoding_to_token_idx = self.convert_to_model_input(tokens)
-            instance = self.create_entity_candidate_data(encodings, spert_tokens)
+                # mapping from span_id to encoding_span
+                # this borders relate to the bert subword encodings
+                entity_encoding_spans = instance["entity_spans"].squeeze(0).tolist()
 
-            # mapping from span_id to encoding_span
-            # this borders relate to the bert subword encodings
-            entity_encoding_spans = instance["entity_spans"].squeeze(0).tolist()
+                # result = model(encodings=batch['encodings'], context_masks=batch['context_masks'],
+                #                entity_masks=batch['entity_masks'], entity_sizes=batch['entity_sizes'],
+                #                entity_spans=batch['entity_spans'], entity_sample_masks=batch['entity_sample_masks'],
+                #                inference=True)
 
-            entity_clf, rel_clf, related_spans = self.model(encodings=instance['encodings'],
-                                                            context_masks=instance['context_masks'],
-                                                            entity_masks=instance['entity_masks'],
-                                                            entity_sizes=instance['entity_sizes'],
-                                                            entity_spans=instance['entity_spans'],
-                                                            entity_sample_masks=instance['entity_sample_masks'],
-                                                            evaluate=True)
+                entity_clf, rel_clf, related_spans = self.model(encodings=instance['encodings'],
+                                                                context_masks=instance['context_masks'],
+                                                                entity_masks=instance['entity_masks'],
+                                                                entity_sizes=instance['entity_sizes'],
+                                                                entity_spans=instance['entity_spans'],
+                                                                entity_sample_masks=instance['entity_sample_masks'],
+                                                                inference=True)
 
-            # related_spans contains contains a list of all span indizes that form a relation.
-            # For each element in related_spans rel_clf contains the classification logits.
-            # we first extract the maximum indices per element from these logits to get the relation label.
-            # aftwerwards we convert both labels and span indices to python lists
-            # the span indices refer to span definitions in instance["entity_spans"]
+                predictions = prediction.convert_predictions(entity_clf, rel_clf, related_spans,
+                                                             instance, self.rel_threshold,
+                                                             self.input_reader)
 
-            batch_rel_max = rel_clf.max(dim=-1)
-            batch_rel_clf = batch_rel_max[1].squeeze(0)
-            batch_rel_prob = batch_rel_max[0].squeeze(0)
-            relation_span_list = related_spans.squeeze(0).tolist()
-            # apply threshold to relations
-            batch_rel_clf[batch_rel_prob < 0.683] = -1
-            relation_label = batch_rel_clf.tolist()
+                relations = self.transform_predictions_to_relations(predictions,spert_tokens)
+                results += [{"relations": relations}]
 
-            relatoins = []
-
-            for label, span_idx in zip(relation_label, relation_span_list):
-                # Receive the name of the relation label
-                # Spert manages this mapping in a DataReader class
-                relation_name = self.input_reader.get_relation_type(label + 1).identifier
-
-                if relation_name == "None":
-                    continue
-
-                if relation_name == "None":
-                    continue
-
-                # Get the ordered argument names
-                h_arg_name, t_arg_name = [n for n in sorted(self.type_defs["relations"][relation_name]["args"])]
-
-                # Get the spans for all arguments
-                # These indices refer to the Bert Subword Tokenization
-                # We need to transform these afterwards
-                span_encoding = [entity_encoding_spans[s] for s in span_idx]
-                h_encoding_span = [encoding_to_token_idx[encoding_idx] for encoding_idx in span_encoding[0]]
-                t_encoding_span = [encoding_to_token_idx[encoding_idx] for encoding_idx in span_encoding[1]]
-
-                relation = {"name": relation_name, "ents": [
-                                                            {"name": h_arg_name,
-                                                             "start": h_encoding_span[0],
-                                                             "end": h_encoding_span[1] - 1,
-                                                             # "tokens": tokens[t_encoding_span[0]: t_encoding_span[1]]
-                                                             },
-                                                            {"name": t_arg_name,
-                                                             "start": t_encoding_span[0],
-                                                             "end": t_encoding_span[1] - 1,
-                                                             #"tokens": tokens[t_encoding_span[0]: t_encoding_span[1]]
-                                                            },
-                ]}
-
-                relatoins += [relation]
-
-            results += [{"relations": relatoins}]
+                # # related_spans contains contains a list of all span indizes that form a relation.
+                # # For each element in related_spans rel_clf contains the classification logits.
+                # # we first extract the maximum indices per element from these logits to get the relation label.
+                # # aftwerwards we convert both labels and span indices to python lists
+                # # the span indices refer to span definitions in instance["entity_spans"]
+                #
+                # batch_rel_max = rel_clf.max(dim=-1)
+                # batch_rel_clf = batch_rel_max[1].squeeze(0)
+                # batch_rel_prob = batch_rel_max[0].squeeze(0)
+                # relation_span_list = related_spans.squeeze(0).tolist()
+                # # apply threshold to relations
+                # batch_rel_clf[batch_rel_prob < 0.4] = -1
+                # relation_label = batch_rel_clf.tolist()
+                #
+                # relatoins = []
+                #
+                # for label, span_idx in zip(relation_label, relation_span_list):
+                #     # Receive the name of the relation label
+                #     # Spert manages this mapping in a DataReader class
+                #     relation_name = self.input_reader.get_relation_type(label + 1).identifier
+                #
+                #     if relation_name == "None":
+                #         continue
+                #
+                #     if relation_name == "None":
+                #         continue
+                #
+                #     # Get the ordered argument names (not needed)
+                #     # h_arg_name, t_arg_name = [n for n in sorted(self.type_defs["relations"][relation_name]["args"])]
+                #     h_arg_name, t_arg_name  = sorted(relation_args_names[relation_name])
+                #     # Get the spans for all arguments
+                #     # These indices refer to the Bert Subword Tokenization
+                #     # We need to transform these afterwards
+                #     span_encoding = [entity_encoding_spans[s] for s in span_idx]
+                #     h_encoding_span = [encoding_to_token_idx[encoding_idx] for encoding_idx in span_encoding[0]]
+                #     t_encoding_span = [encoding_to_token_idx[encoding_idx] for encoding_idx in span_encoding[1]]
+                #
+                #     relation = {"name": relation_name, "ents": [
+                #                                                 {"name": h_arg_name,
+                #                                                  "start": h_encoding_span[0],
+                #                                                  "end": h_encoding_span[1] - 1,
+                #                                                  # "tokens": tokens[t_encoding_span[0]: t_encoding_span[1]]
+                #                                                  },
+                #                                                 {"name": t_arg_name,
+                #                                                  "start": t_encoding_span[0],
+                #                                                  "end": t_encoding_span[1] - 1,
+                #                                                  #"tokens": tokens[t_encoding_span[0]: t_encoding_span[1]]
+                #                                                 },
+                #     ]}
+                #
+                #     relatoins += [relation]
+                #
+                # results += [{"relations": relatoins}]
 
         return results
 
