@@ -6,7 +6,6 @@ channels:
   - plotly
   - bokeh
 dependencies:
-  - allennlp-optuna=0.1.4
   - python=3.8
   - html2text=2020.1.16
   - pip=20.3.3
@@ -34,6 +33,7 @@ dependencies:
   - pip:
     - allennlp==1.2.0
     - allennlp-models==1.2.0
+    - allennlp-optuna==0.1.4
     - optuna==2.4.0
     - optuna-dashboard==0.2.2
     - streamlit==0.75.0
