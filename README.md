@@ -38,7 +38,7 @@ files in the models folder or execute the following shell commands.
 ```shell
 wget -c https://fh-aachen.sciebo.de/s/D5FLVN7qk2UTCmX/download -O models.zip
 
-unzip midels.zip
+unzip models.zip
 
 rm models.zip
 ```
