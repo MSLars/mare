@@ -48,18 +48,3 @@ class SequenceLabElmoPredictor(Predictor):
     def predict_batch_json(self, inputs: List[JsonDict]) -> List[JsonDict]:
         output = super().predict_batch_json(inputs)
         return [self._post_processing_prediction(entry) for entry in output]
-
-
-@Predictor.register("seq_lab_elmo_pred_sentence")
-class SequenceLabElmoPredictorSentence(SequenceLabElmoPredictor):
-    def _json_to_instance(self, json_dict: JsonDict) -> Instance:
-        raw_text = json_dict["text"]
-
-        nlp = spacy.load("de_core_news_sm")
-        doc = nlp(raw_text)
-
-        tokens = {"tokens": [t.text for t in doc]}
-        return super()._json_to_instance(tokens)
-
-
-

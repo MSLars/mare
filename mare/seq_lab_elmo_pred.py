@@ -50,7 +50,7 @@ class SequenceLabElmoPredictor(Predictor):
         return [self._post_processing_prediction(entry) for entry in output]
 
 
-@Predictor.register("seq_lab_elmo_pred_sentence")
+@Predictor.register("seq_lab_elmo_sentence")
 class SequenceLabElmoPredictorSentence(SequenceLabElmoPredictor):
     def _json_to_instance(self, json_dict: JsonDict) -> Instance:
         raw_text = json_dict["text"]
