@@ -8,7 +8,7 @@ from mare.label.extraction import transform_tags_to_relation
 import spacy
 
 
-@Predictor.register("seq_lab_elmo_pred")
+@Predictor.register("seq_lab_elmo_pred_no_trig")
 class SequenceLabElmoPredictor(Predictor):
 
     def _json_to_instance(self, json_dict: JsonDict) -> Instance:
@@ -37,7 +37,7 @@ class SequenceLabElmoPredictor(Predictor):
         return result
 
     def _post_processing_prediction(self, prediction):
-        relations = transform_tags_to_relation(prediction["tags"], max_inner_range=11, has_mode=False, include_trigger=True)
+        relations = transform_tags_to_relation(prediction["tags"], max_inner_range=11, has_mode=False, include_trigger=False)
         return self.transform_relations_to_format(relations)
 
     def predict_json(self, inputs: JsonDict) -> JsonDict:

@@ -20,12 +20,17 @@ To install the conda environment execute
 conda env create -f environment.yml
 ```
 
+Install mare, the local directory via pip
+
+```shell
+pip install -e .
+```
+
 This may take several minutes.
 
 Create some necessary folders
 
 ```shell
-mkdir models
 mkdir evaluations
 ```
 
@@ -56,7 +61,7 @@ The F1 scores for AR_no_trigger und MRE_no_trigger correspond to the values
 of **Seq. Tag. with Trigger** un **Table 3**
 
 ```shell
-sh scripts/evaluate_model.sh models/sequence.tar.gz evaluations/seq_tag seq_lab_elmo_pred
+sh scripts/evaluate_model.sh models/sequence.tar.gz evaluations/seq_tag seq_lab_elmo_pred mare
 ```
 
 The result shoud be
@@ -114,7 +119,7 @@ The F1 scores for AR_no_trigger und MRE_no_trigger correspond to the values
 of **Span Lab. with Trigger** un **Table 3**
 
 ```shell
-sh scripts/evaluate_model.sh models/span_based.tar.gz evaluations/span_lab mare.span_based_precidtor.SpanBasedPredictor
+sh scripts/evaluate_model.sh models/span_based.tar.gz evaluations/span_lab mare.span_based_precidtor.SpanBasedPredictor mare
 ```
 
 The result shoud be
@@ -172,7 +177,7 @@ The F1 scores for AR_no_trigger und MRE_no_trigger correspond to the values
 of **Dygie++ with Trigger** in **Table 3**
 
 ```shell
-sh scripts/evaluate_model.sh models/dygiepp.tar.gz evaluations/dygiepp mare.evaluation.mock_model.DygieppMockModel
+sh scripts/evaluate_model.sh models/dygiepp.tar.gz evaluations/dygiepp mare.evaluation.mock_model.DygieppMockModel mare
 ```
 
 The result shoud be
@@ -227,7 +232,7 @@ The value for BRE corresponds to the values of
 **SpERT** in **Table 2**.
 --model-path models/spart.tar.gz --test-data https://fh-aachen.sciebo.de/s/9ghU4Qi1azUMFPW/download --inc spart --output-dir evaluations/spert --predictor spart -f
 ```shell
-sh scripts/evaluate_model.sh models/spart.tar.gz evaluations/spert spart
+sh scripts/evaluate_model.sh models/spart.tar.gz evaluations/spert spart spart
 ```
 
 The result shoud be
@@ -282,7 +287,7 @@ The values for AR, Cl, MRE, CRE und BRE correspond to the values of
 
 
 ```shell
-sh scripts/evaluate_model.sh models/sequence_tagging_baseline.tar.gz evaluations/seq_tag_baseline seq_lab_elmo_pred
+sh scripts/evaluate_model.sh models/sequence_tagging_baseline.tar.gz evaluations/seq_tag_baseline seq_lab_elmo_pred mare
 ```
 
 The result shoud be
@@ -339,7 +344,7 @@ of **Seq. Tag. without Trigger** in **Table 3**
 Change the include_trigger Parameter in mare/seq_lab_elmo_pred.py to False.
 
 ```shell
-sh scripts/evaluate_model.sh models/sequence_no_trigger.tar.gz evaluations/seq_tag_no_trig seq_lab_elmo_pred
+sh scripts/evaluate_model.sh models/sequence_no_trigger.tar.gz evaluations/seq_tag_no_trig seq_lab_elmo_pred_no_trig mare
 ```
 
 The result shoud be
@@ -395,7 +400,7 @@ of **Span Lab. without Trigger** in **Table 3**
 
 
 ```shell
-sh scripts/evaluate_model.sh models/span_based_no_trigger_local.tar.gz evaluations/span_lab_no_trig mare.span_based_precidtor.SpanBasedPredictor
+sh scripts/evaluate_model.sh models/span_based_no_trigger_local.tar.gz evaluations/span_lab_no_trig mare.span_based_precidtor.SpanBasedPredictor mare
 ```
 
 The result shoud be
