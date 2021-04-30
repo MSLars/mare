@@ -230,7 +230,6 @@ f1_micro: 0.616470588235294
 
 The value for BRE corresponds to the values of 
 **SpERT** in **Table 2**.
---model-path models/spart.tar.gz --test-data https://fh-aachen.sciebo.de/s/9ghU4Qi1azUMFPW/download --inc spart --output-dir evaluations/spert --predictor spart -f
 ```shell
 sh scripts/evaluate_model.sh models/spart.tar.gz evaluations/spert spart spart
 ```
@@ -449,6 +448,3 @@ recall_micro: 0.613138686131386
 f1_micro: 0.6622864651773981
 
 ```
-# TODO
-
-Change the include_trigger Parameter in mare/seq_lab_elmo_pred.py !
