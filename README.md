@@ -32,8 +32,16 @@ mkdir evaluations
 # Reproduction of results
 
 To reproduce the values from the Paper, download the corresponding models
-from https://fh-aachen.sciebo.de/s/T0RFmqNU0n5jI08 and put the `.tar.gz`
-files in the models folder.
+from https://fh-aachen.sciebo.de/s/D5FLVN7qk2UTCmX and put the `.tar.gz`
+files in the models folder or execute the following shell commands.
+
+```shell
+wget -c https://fh-aachen.sciebo.de/s/D5FLVN7qk2UTCmX/download -O models.zip
+
+unzip midels.zip
+
+rm models.zip
+```
 
 The following instructions can be used to reproduce the results in the paper.
 
@@ -217,15 +225,55 @@ f1_micro: 0.616470588235294
 
 The value for BRE corresponds to the values of 
 **SpERT** in **Table 2**.
-
+--model-path models/spart.tar.gz --test-data https://fh-aachen.sciebo.de/s/9ghU4Qi1azUMFPW/download --inc spart --output-dir evaluations/spert --predictor spart -f
 ```shell
-sh scripts/evaluate_model.sh models/span_based.tar.gz evaluations/test mare.span_based_precidtor.SpanBasedPredictor
+sh scripts/evaluate_model.sh models/spart.tar.gz evaluations/spert spart
 ```
 
 The result shoud be
 
 ```
+EVALUATION RESULTS FOR MRE
 
+precision_micro: 0.43269230769230704
+recall_micro: 0.3515625
+f1_micro: 0.387931034482758
+
+EVALUATION RESULTS FOR Cl
+
+precision_micro: 0.596153846153846
+recall_micro: 0.484375
+f1_micro: 0.5344827586206891
+
+EVALUATION RESULTS FOR CRE
+
+precision_micro: 0.08653846153846101
+recall_micro: 0.0703125
+f1_micro: 0.077586206896551
+
+EVALUATION RESULTS FOR AR
+
+precision_micro: 0.519230769230769
+recall_micro: 0.202247191011235
+f1_micro: 0.2911051212938
+
+EVALUATION RESULTS FOR BRE
+
+precision_micro: 0.573333333333333
+recall_micro: 0.45263157894736805
+f1_micro: 0.505882352941176
+
+EVALUATION RESULTS FOR MRE_no_trigger
+
+precision_micro: 0.48076923076923006
+recall_micro: 0.390625
+f1_micro: 0.43103448275862005
+
+EVALUATION RESULTS FOR AR_no_trigger
+
+precision_micro: 0.528
+recall_micro: 0.16058394160583903
+f1_micro: 0.246268656716417
 ```
 
 ## Sequence Tagging Baseline

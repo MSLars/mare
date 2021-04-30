@@ -267,13 +267,13 @@ def smart_data_evaluate(model_path, predictor, test_data, include_package, outpu
     def eval_model(predictor, test_data_path):
         evaluate_runner = EvaluationRunner(predictor, test_data_path, output_dir)
         evaluate_runner.evaluate(
-                                 # MRE=respect_only_mandatory_args,
-                                 # Cl=only_relation_classification,
-                                 # CRE=all_args_mandatory,
-                                 # AR=named_entity_recognition_v2,
+                                 MRE=respect_only_mandatory_args,
+                                 Cl=only_relation_classification,
+                                 CRE=all_args_mandatory,
+                                 AR=named_entity_recognition_v2,
                                  BRE=spert_only_two_mandatory_args,
-                                 # MRE_no_trigger=respect_only_mandatory_args_no_trigger,
-                                 # AR_no_trigger=named_entity_recognition_v2_no_trigger
+                                 MRE_no_trigger=respect_only_mandatory_args_no_trigger,
+                                 AR_no_trigger=named_entity_recognition_v2_no_trigger
         )
         evaluate_runner.save_report()
 
