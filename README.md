@@ -1,5 +1,5 @@
-# mare
-Repository for the paper submission
+# MARE - Multi-Attribute Relation Extraction
+Repository for the paper submission: #TODO: insert link, when available
 
 
 # Environment
@@ -20,7 +20,7 @@ To install the conda environment execute
 conda env create -f environment.yml
 ```
 
-Install mare, the local directory via pip
+Install mare (the local directory) via pip
 
 ```shell
 pip install -e .
