@@ -51,7 +51,8 @@ rm models.zip
 The following instructions can be used to reproduce the results in the paper.
 
 All evaluations create a subfolder in evaluations. if a folder already exists,
-the evaluation is not executed multiple times.
+the evaluation is not executed multiple times. <!-- the script uses -f, hence the evaluation will be overwritten? -->
+
 ## Sequence Tagging
 
 The values for AR, Cl, MRE, CRE und BRE correspond to the values of 
@@ -226,7 +227,7 @@ recall_micro: 0.6374695863746951
 f1_micro: 0.616470588235294
 ```
 
-## SpERT
+## SpERT (SpART = SpERT with AllenNLP)
 
 The value for BRE corresponds to the values of 
 **SpERT** in **Table 2**.
