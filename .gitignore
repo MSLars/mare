@@ -1,5 +1,6 @@
 /models/
 /evaluations/*
+!evaluations/.gitkeep
 
 __pycache__/
 *.py[cod]

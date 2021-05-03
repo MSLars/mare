@@ -1,20 +1,15 @@
 from allennlp.models.model import Model
 from allennlp.data import Vocabulary, TextFieldTensors
 from allennlp.modules import TextFieldEmbedder
-from allennlp.nn import util
-from spert.input_reader import BaseInputReader
 from torch import nn as nn
-
-import torch
-
 from typing import List, Dict, Any, Tuple
-
 from spart.data.dataset_readers import spart_reader
-from spart.data.dataset_readers.spart_reader import create_rel_mask, relation_args_names
+from spart.data.dataset_readers.spart_reader import relation_args_names
 from spart.metrics.fbeta_measure import FBetaMeasure
 from spart.metrics.fbeta_multi import FBetaMultiLabelMeasure
 
-import itertools
+import torch
+
 
 def batch_index(tensor, index, pad=False):
     if tensor.shape[0] != index.shape[0]:

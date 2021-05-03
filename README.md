@@ -28,12 +28,6 @@ pip install -e .
 
 This may take several minutes.
 
-Create some necessary folders
-
-```shell
-mkdir evaluations
-```
-
 # Reproduction of results
 
 To reproduce the values from the Paper, download the corresponding models
