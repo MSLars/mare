@@ -2,6 +2,7 @@ from time import time
 
 def timeit(method):
     def timed(*args, **kw):
+        print("Starting {}".format(method.__name__))
         ts = time()
         result = method(*args, **kw)
         te = time()

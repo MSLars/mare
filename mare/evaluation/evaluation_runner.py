@@ -15,16 +15,14 @@
 #     ]
 # }
 #
-# Ideen:
-# Soft Constrained wie im Paper
-# Hard Constrained, das alle Argumente als mandatory ansieht
-#
-# Auf Relationsebene und nicht auf Dokumentebene testen?
+import warnings
+
+from sklearn.exceptions import UndefinedMetricWarning
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 import srsly
 import allennlp.common.util as common_util
 from allennlp.common.file_utils import cached_path
 from sklearn.metrics import f1_score, precision_score, recall_score
-import fastavro
 import pandas as pd
 import json
 from allennlp.predictors import Predictor
@@ -199,6 +197,7 @@ class EvaluationRunner:
         return self._store[self.STRATS][run_name][self.PRED_LABEL]
 
     def save_report(self):
+        print("Calculating metrics")
         for run_name in self._store[self.STRATS]:
             for average in ["micro", "macro", "weighted"]:
                 precision = self._precision_score(run_name, average=average)

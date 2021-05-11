@@ -1,5 +1,5 @@
-# mare
-Repository for the paper submission
+# MARE - Multi-Attribute Relation Extraction
+Repository for the paper submission: #TODO: insert link, when available
 
 
 # Environment
@@ -20,19 +20,13 @@ To install the conda environment execute
 conda env create -f environment.yml
 ```
 
-Install mare, the local directory via pip
+Install mare (the local directory) via pip
 
 ```shell
 pip install -e .
 ```
 
 This may take several minutes.
-
-Create some necessary folders
-
-```shell
-mkdir evaluations
-```
 
 # Reproduction of results
 
@@ -49,9 +43,8 @@ rm models.zip
 ```
 
 The following instructions can be used to reproduce the results in the paper.
+All evaluations create a subfolder in evaluations.
 
-All evaluations create a subfolder in evaluations. if a folder already exists,
-the evaluation is not executed multiple times.
 ## Sequence Tagging
 
 The values for AR, Cl, MRE, CRE und BRE correspond to the values of 
@@ -226,7 +219,7 @@ recall_micro: 0.6374695863746951
 f1_micro: 0.616470588235294
 ```
 
-## SpERT
+## SpERT (SpART = SpERT with AllenNLP)
 
 The value for BRE corresponds to the values of 
 **SpERT** in **Table 2**.
