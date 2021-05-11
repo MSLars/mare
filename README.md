@@ -43,9 +43,7 @@ rm models.zip
 ```
 
 The following instructions can be used to reproduce the results in the paper.
-
-All evaluations create a subfolder in evaluations. if a folder already exists,
-the evaluation is not executed multiple times. <!-- the script uses -f, hence the evaluation will be overwritten? -->
+All evaluations create a subfolder in evaluations.
 
 ## Sequence Tagging
 
