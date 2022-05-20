@@ -1,3 +1,8 @@
+local bert_model = "roberta-large";
+local dim = 1024;
+local emb_learn_rate = 5e-6;
+local learn_rate = 1e-4;
+
 {
     dataset_reader: {
         type: "span_re",
@@ -7,7 +12,7 @@
             bert: {
                 type: "pretrained_transformer_mismatched",
                 max_length: 512,
-                model_name: "roberta-large"
+                model_name: bert_model
             }
         }
     },
@@ -16,8 +21,8 @@
         feedforward: {
             activations: "relu",
             dropout: 0.05,
-            hidden_dims: 1024,
-            input_dim: 1024,
+            hidden_dims: dim,
+            input_dim: dim,
             num_layers: 2
         },
         initializer: {
@@ -58,7 +63,7 @@
         },
         span_extractor: {
             type: "self_attentive",
-            input_dim: 1024
+            input_dim: dim
         },
         text_field_embedder: {
             token_embedders: {
@@ -85,7 +90,7 @@
         num_epochs: 50,
         optimizer: {
             type: "adamw",
-            lr: 0.001,
+            lr: learn_rate,
             parameter_groups: [
                 [
                     [
@@ -93,7 +98,7 @@
                     ],
                     {
                         finetune: true,
-                        lr: 5e-05,
+                        lr: emb_learn_rate,
                         weight_decay: 0.01
                     }
                 ]
