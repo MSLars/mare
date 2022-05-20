@@ -20,6 +20,11 @@ To install the conda environment execute
 conda env create -f environment.yml
 ```
 
+activate the envoronment
+```shell
+conda activate mare
+```
+
 Install mare (the local directory) via pip
 
 ```shell
@@ -27,6 +32,34 @@ pip install -e .
 ```
 
 This may take several minutes.
+
+# RE Comparative Study
+
+This section contains all information necessary to produce the needed results.
+
+At first follow the setup in `Environment`. Additionally, during the training hugging face transformer models will 
+be downloaded.
+
+## Training Models
+
+The necessary file format is similar to the format of your [sample](https://github.com/ackermann-lars/re-study/blob/main/sample.jsonl).
+Create a configuration file, similar to `config/span_based.jsonnet`. Replace the file paths in line 1-4:
+```
+{
+    train_data_path: "data/re_train.jsonl",
+    validation_data_path: "data/re_dev.jsonl",
+    test_data_path: "data/re_test.jsonl",
+    ...
+}
+```
+with the corresponding ones.
+
+To train a new model, go to the project root directory (mare), replace <output_dir> and execute:
+```shell
+allennlp train config/span_based.jsonnet -s <output_dir> --include-package mare
+```
+
+In the specified directory you will find a fiile `model.tar.gz` containing the final model weights.
 
 # Reproduction of results
 
