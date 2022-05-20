@@ -7,7 +7,7 @@
             bert: {
                 type: "pretrained_transformer_mismatched",
                 max_length: 512,
-                model_name: "roberta-base"
+                model_name: "roberta-large"
             }
         }
     },
@@ -16,8 +16,8 @@
         feedforward: {
             activations: "relu",
             dropout: 0.05,
-            hidden_dims: 768,
-            input_dim: 768,
+            hidden_dims: 1024,
+            input_dim: 1024,
             num_layers: 2
         },
         initializer: {
@@ -58,14 +58,14 @@
         },
         span_extractor: {
             type: "self_attentive",
-            input_dim: 768
+            input_dim: 1024
         },
         text_field_embedder: {
             token_embedders: {
                 bert: {
                     type: "pretrained_transformer_mismatched",
                     max_length: 512,
-                    model_name: "roberta-base"
+                    model_name: "roberta-large"
                 }
             }
         }
