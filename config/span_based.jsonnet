@@ -1,7 +1,4 @@
 {
-    train_data_path: "data/re_train.jsonl",
-    validation_data_path: "data/re_dev.jsonl",
-    test_data_path: "data/re_test.jsonl",
     dataset_reader: {
         type: "span_re",
         max_span_width: 10,
@@ -10,7 +7,7 @@
             bert: {
                 type: "pretrained_transformer_mismatched",
                 max_length: 512,
-                model_name: "roberta-large"
+                model_name: "roberta-base"
             }
         }
     },
@@ -18,9 +15,9 @@
         type: "span_ner_tagger",
         feedforward: {
             activations: "relu",
-            dropout: 0.2,
-            hidden_dims: 2048,
-            input_dim: 1024,
+            dropout: 0.02,
+            hidden_dims: 768,
+            input_dim: 768,
             num_layers: 2
         },
         initializer: {
@@ -41,24 +38,24 @@
         },
         max_inner_range: 20,
         ner_threshold: 0.5,
-//        regularizer: {
-//            regexes: [
-//                [
-//                    ".*ner_scorer.*weight.*",
-//                    {
-//                        alpha: 0.007774563908924041,
-//                        type: "l2"
-//                    }
-//                ],
-//                [
-//                    ".*span_extractor.*weight.*",
-//                    {
-//                        alpha: 0.007774563908924041,
-//                        type: "l2"
-//                    }
-//                ]
-//            ]
-//        },
+        regularizer: {
+            regexes: [
+                [
+                    ".*ner_scorer.*weight.*",
+                    {
+                        alpha: 0.007774563908924041,
+                        type: "l2"
+                    }
+                ],
+                [
+                    ".*span_extractor.*weight.*",
+                    {
+                        alpha: 0.007774563908924041,
+                        type: "l2"
+                    }
+                ]
+            ]
+        },
         span_extractor: {
             type: "self_attentive",
             input_dim: 1024
@@ -68,13 +65,16 @@
                 bert: {
                     type: "pretrained_transformer_mismatched",
                     max_length: 512,
-                    model_name: "roberta-large"
+                    model_name: "roberta-base"
                 }
             }
         }
     },
+    train_data_path: "data/re_train.jsonl",
+    validation_data_path: "data/re_dev.jsonl",
+    test_data_path: "data/re_test.jsonl",
     trainer: {
-        cuda_device: 1,
+        cuda_device: 0,
         grad_norm: 5,
         learning_rate_scheduler: {
             type: "reduce_on_plateau",
@@ -85,7 +85,7 @@
         num_epochs: 50,
         optimizer: {
             type: "adamw",
-            lr: 1e-3,
+            lr: 0.001,
             parameter_groups: [
                 [
                     [
