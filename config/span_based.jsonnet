@@ -74,7 +74,7 @@
         }
     },
     trainer: {
-        cuda_device: 0,
+        cuda_device: 1,
         grad_norm: 5,
         learning_rate_scheduler: {
             type: "reduce_on_plateau",
@@ -106,7 +106,7 @@
     data_loader: {
         batch_sampler: {
             type: "bucket",
-            batch_size: 16
+            batch_size: 8
         }
     },
     evaluate_on_test: true
