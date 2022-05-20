@@ -20,7 +20,7 @@ local learn_rate = 1e-4;
         type: "span_ner_tagger",
         feedforward: {
             activations: "relu",
-            dropout: 0.05,
+            dropout: 0.3,
             hidden_dims: dim,
             input_dim: dim,
             num_layers: 2
