@@ -11,3 +11,4 @@ mare.egg-info/
 /data/re_dev.jsonl
 /data/re_test.jsonl
 /data/re_train.jsonl
+/test.json

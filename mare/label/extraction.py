@@ -144,31 +144,20 @@ def get_token_index_from_char_index(start, end, token_borders, fuzzy=False):
 
 
 def extract_relations_from_smart_sample(sample, only_mandatory=False, include_trigger=True):
-    token_borders = [(t["span"]["start"], t["span"]["end"]) for t in sample["tokens"]]
 
     relations = []
 
-    for relation in sample["relationMentions"]:
+    for relation in sample["relations"]:
 
-        relation_name = relation["name"]
-        spans = []
+        head = Span(relation["head_entity"]["token_indices"][0],
+                    relation["head_entity"]["token_indices"][-1],
+                    "head")
 
-        for argument in relation["args"]:
+        tail = Span(relation["tail_entity"]["token_indices"][0],
+                    relation["tail_entity"]["token_indices"][-1],
+                    "tail")
 
-            if only_mandatory and argument["role"] not in relation_mandatory_args[relation_name]:
-                continue
-
-            if not include_trigger and argument["role"] == "trigger":
-                continue
-
-            argument_role = argument["role"]
-            entity = argument["conceptMention"]["span"]
-            start, end = get_token_index_from_char_index(entity["start"], entity["end"], token_borders)
-
-            spans += [Span(start, end, role=argument_role)]
-
-        if spans:
-            relations += [Relation(spans, label=relation_name)]
+        relations += [Relation([head, tail], label=relation["type"])]
 
     relations = sorted(relations, key=lambda r: (r.start, r.end, r.label))
 
@@ -389,18 +378,15 @@ def transform_tags_to_relation(tags: List[str], max_inner_range=1000, has_mode=F
 
 
 def extract_entities(sample):
-    token_borders = [(t["span"]["start"], t["span"]["end"]) for t in sample["tokens"]]
 
     entities = []
-    for concept_mention in sample["conceptMentions"]:
-        start = concept_mention["span"]["start"]
-        end = concept_mention["span"]["end"]
+    for entity in sample["entities"]:
 
-        start = [i[0] for i in enumerate(token_borders) if i[1][0] == start]
-        end = [i[0] for i in enumerate(token_borders) if i[1][1] == end]
+        entities += [Span(entity["token_indices"][0],
+                          entity["token_indices"][-1],
+                          "ent")]
 
-        if len(start) > 0 and len(end) > 0:
-            entities += [Span(start[0], end[0], role=concept_mention["type"])]
+    entities = sorted(entities, key=lambda x: (x.start, x.end))
 
     return entities
 

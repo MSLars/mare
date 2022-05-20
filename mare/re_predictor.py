@@ -31,7 +31,35 @@ class SpanBasedPredictor(Predictor):
 
     def predict_json(self, inputs: JsonDict) -> JsonDict:
         output_dict = super().predict_json(inputs)
-        return output_dict["relations"]
+        id = inputs["id"]
+        tokens = inputs["tokens"]
+        target_relations = []
+        for rel in output_dict["relations"]:
+            try:
+                head_ent = [e for e in rel["ents"] if e["name"] == "head"][0]
+                tail_ent = [e for e in rel["ents"] if e["name"] == "tail"][0]
+
+                head_char_start = tokens[head_ent["start"]]["start"]
+                head_char_end = tokens[head_ent["end"]]["stop"]
+
+                tail_char_start = tokens[tail_ent["start"]]["start"]
+                tail_char_end = tokens[tail_ent["end"]]["stop"]
+
+                target_relations.append({
+                    "head_entity": {
+                        "start": head_char_start,
+                        "stop": head_char_end
+                    },
+                    "tail_entity": {
+                        "start": tail_char_start,
+                        "stop": tail_char_end
+                    },
+                    "type": rel["name"]
+                })
+            except:
+                continue
+
+        return {"id": id, "relations": target_relations}
 
     #@timeit
     def predict_batch_json(self, inputs: List[JsonDict]) -> List[JsonDict]:

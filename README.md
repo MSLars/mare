@@ -28,7 +28,7 @@ conda activate mare
 Install mare (the local directory) via pip
 
 ```shell
-pip install -e .
+conda develop .
 ```
 
 This may take several minutes.
@@ -36,6 +36,11 @@ This may take several minutes.
 # RE Comparative Study
 
 This section contains all information necessary to produce the needed results.
+
+Change to the branch provided for your project
+```shell
+git checkout re_study
+```
 
 At first follow the setup in `Environment`. Additionally, during the training hugging face transformer models will 
 be downloaded.
@@ -60,6 +65,17 @@ allennlp train config/span_based.jsonnet -s <output_dir> --include-package mare
 ```
 
 In the specified directory you will find a fiile `model.tar.gz` containing the final model weights.
+All hyperparameter are defined in the config file.
+
+## Evaluation
+
+To evaluate our approach, please replace <target_file> with your target file path 
+(file will be created and contains the model prediction), <model_file> with the `.tar.gz` model file, 
+that resulted from your training, <test_data> with your test data and execute:
+
+```shell
+allennlp predict <model_file> <test_data> --predictor re_predictor --include-package mare --output-file <target_file>
+```
 
 # Reproduction of results
 
