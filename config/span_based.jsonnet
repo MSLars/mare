@@ -68,7 +68,7 @@
                 bert: {
                     type: "pretrained_transformer_mismatched",
                     max_length: 512,
-                    model_name: "roberta-base"
+                    model_name: "roberta-large"
                 }
             }
         }
