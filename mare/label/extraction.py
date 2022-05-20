@@ -309,7 +309,7 @@ def transform_spans_to_relation(spans: List[Span], max_inner_range=1000, has_mod
     else:
         mandatory_args = relation_mandatory_args_without_trigger
 
-    relation_label = {a[0][:a[0].find("-")] for a in spans}
+    relation_label = {a[0][:a[0].rfind("-")] for a in spans}
 
     relations = []
 
@@ -321,10 +321,10 @@ def transform_spans_to_relation(spans: List[Span], max_inner_range=1000, has_mod
 
         for mode in modes:
             if mode != "":
-                relation_spans = [Span(*a[1], role=a[0][a[0].find("-") + 1:]) for a in spans if
+                relation_spans = [Span(*a[1], role=a[0][a[0].rfind("-") + 1:]) for a in spans if
                                   a[0].startswith(label) and a[2] == mode]
             else:
-                relation_spans = [Span(*a[1], role=a[0][a[0].find("-") + 1:]) for a in spans if
+                relation_spans = [Span(*a[1], role=a[0][a[0].rfind("-") + 1:]) for a in spans if
                                   a[0].startswith(label)]
             if relation_spans:
                 final_spans = []

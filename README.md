@@ -77,6 +77,8 @@ that resulted from your training, <test_data> with your test data and execute:
 allennlp predict <model_file> <test_data> --predictor re_predictor --include-package mare --output-file <target_file>
 ```
 
+The resulting text file should contain the correct jsonl format.
+
 # Reproduction of results
 
 To reproduce the values from the Paper, download the corresponding models
