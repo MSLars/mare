@@ -74,7 +74,7 @@
     validation_data_path: "data/re_dev.jsonl",
     test_data_path: "data/re_test.jsonl",
     trainer: {
-        cuda_device: 0,
+        cuda_device: 1,
         grad_norm: 5,
         learning_rate_scheduler: {
             type: "reduce_on_plateau",
