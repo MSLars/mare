@@ -15,7 +15,7 @@
         type: "span_ner_tagger",
         feedforward: {
             activations: "relu",
-            dropout: 0.02,
+            dropout: 0.05,
             hidden_dims: 768,
             input_dim: 768,
             num_layers: 2
@@ -58,7 +58,7 @@
         },
         span_extractor: {
             type: "self_attentive",
-            input_dim: 1024
+            input_dim: 768
         },
         text_field_embedder: {
             token_embedders: {
