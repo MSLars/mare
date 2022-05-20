@@ -20,7 +20,7 @@ local learn_rate = 1e-4;
         type: "span_ner_tagger",
         feedforward: {
             activations: "relu",
-            dropout: 0.3,
+            dropout: 0.05,
             hidden_dims: dim,
             input_dim: dim,
             num_layers: 2
@@ -48,14 +48,16 @@ local learn_rate = 1e-4;
                 [
                     ".*ner_scorer.*weight.*",
                     {
-                        alpha: 0.007774563908924041,
+                        #alpha: 0.007774563908924041,
+                        alpha: 7e-6,
                         type: "l2"
                     }
                 ],
                 [
                     ".*span_extractor.*weight.*",
                     {
-                        alpha: 0.007774563908924041,
+                        #alpha: 0.007774563908924041,
+                        alpha: 7e-6,
                         type: "l2"
                     }
                 ]
