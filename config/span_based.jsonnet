@@ -48,16 +48,14 @@ local learn_rate = 1e-4;
                 [
                     ".*ner_scorer.*weight.*",
                     {
-                        #alpha: 0.007774563908924041,
-                        alpha: 7e-6,
+                        alpha: 0.007774563908924041,
                         type: "l2"
                     }
                 ],
                 [
                     ".*span_extractor.*weight.*",
                     {
-                        #alpha: 0.007774563908924041,
-                        alpha: 7e-6,
+                        alpha: 0.007774563908924041,
                         type: "l2"
                     }
                 ]
