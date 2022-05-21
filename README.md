@@ -59,9 +59,9 @@ Create a configuration file, similar to `config/span_based.jsonnet`. Replace the
 ```
 with the corresponding ones.
 
-To train a new model, go to the project root directory (mare), replace <output_dir> and execute:
+To train a new model, go to the project root directory (mare), replace <path-to_config> with the path to your config file, e.g. `config/span_based.jsonnet`, replace <output_dir> and execute:
 ```shell
-allennlp train config/span_based.jsonnet -s <output_dir> --include-package mare
+allennlp train <path_to_config> -s <output_dir> --include-package mare
 ```
 
 In the specified directory you will find a fiile `model.tar.gz` containing the final model weights.
