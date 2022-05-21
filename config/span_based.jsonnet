@@ -4,6 +4,9 @@ local emb_learn_rate = 5e-6;
 local learn_rate = 1e-4;
 
 {
+    train_data_path: "data/re_train.jsonl",
+    validation_data_path: "data/re_dev.jsonl",
+    test_data_path: "data/re_test.jsonl",
     dataset_reader: {
         type: "span_re",
         max_span_width: 10,
@@ -75,9 +78,6 @@ local learn_rate = 1e-4;
             }
         }
     },
-    train_data_path: "data/re_train.jsonl",
-    validation_data_path: "data/re_dev.jsonl",
-    test_data_path: "data/re_test.jsonl",
     trainer: {
         cuda_device: 1,
         grad_norm: 5,

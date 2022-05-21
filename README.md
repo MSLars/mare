@@ -48,7 +48,7 @@ be downloaded.
 ## Training Models
 
 The necessary file format is similar to the format of your [sample](https://github.com/ackermann-lars/re-study/blob/main/sample.jsonl).
-Create a configuration file, similar to `config/span_based.jsonnet`. Replace the file paths in line 1-4:
+Create a configuration file, similar to `config/span_based.jsonnet`. Replace the file paths in lines 7-9:
 ```
 {
     train_data_path: "data/re_train.jsonl",
